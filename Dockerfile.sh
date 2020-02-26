@@ -11,9 +11,7 @@ COPY overlays/ /var/lib/layman
 COPY files/install.sh /
 COPY files/install-riak.sh /
 COPY files/vars.config /
-COPY files/riak-rebar.config /
-COPY files/riak-reltool.config /
-COPY files/riak.schema /
+COPY files/riak.patch /
 COPY files/erlang_otp.patch /
 RUN /install.sh
 RUN /install-riak.sh
@@ -66,7 +64,7 @@ VOLUME /var/lib/riak
 # Prepare for bootstrapping schemas
 RUN mkdir -p /etc/riak/schemas
 
-ENV RIAK_VERSION 2.9.0
+ENV RIAK_VERSION 2.9.1
 ENV RIAK_HOME /usr/lib/riak
 ENV RIAK_FLAVOR KV
 

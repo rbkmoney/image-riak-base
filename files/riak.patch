@@ -1,0 +1,65 @@
+diff --git a/rebar.config b/rebar.config
+index 06c1746f..32d69cca 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -23,7 +23,8 @@
+         {riak_auth_mods, ".*", {git, "git://github.com/basho/riak_auth_mods.git", {tag, "2.1.0"}}},
+         {riak_repl, ".*", {git, "git://github.com/basho/riak_repl.git", {tag, "riak_kv-2.9.1"}}},
+ 	{yokozuna, ".*", {git, "git://github.com/basho/yokozuna.git", {tag, "riak_kv-2.9.1"}}},
+-        {rebar_lock_deps_plugin, ".*", {git, "https://github.com/basho/rebar_lock_deps_plugin.git", {tag, "3.1.0p1"}}}
++        {rebar_lock_deps_plugin, ".*", {git, "https://github.com/basho/rebar_lock_deps_plugin.git", {tag, "3.1.0p1"}}},
++    {lager_logstash_formatter, ".*", {git, "https://github.com/rbkmoney/lager_logstash_formatter.git", {branch, "riak-2.9"}}}
+        ]}.
+ 
+ {plugins, [rebar_lock_deps_plugin]}.
+diff --git a/rebar.config.lock b/rebar.config.lock
+index 977e0b9a..fce421ff 100644
+--- a/rebar.config.lock
++++ b/rebar.config.lock
+@@ -187,6 +187,9 @@
+        {yokozuna,".*",
+                  {git,"git://github.com/basho/yokozuna.git",
+                       "1c533e3366a3c67c466f5d6523bc9c87ecea9400"}},
++       {lager_logstash_formatter,".*",
++                 {git,"https://github.com/rbkmoney/lager_logstash_formatter.git",
++                      "8adc2b6cdc69002badd409a6c6e3f4642d39d684"}},
+        {rebar_lock_deps_plugin,".*",
+                                {git,"https://github.com/basho/rebar_lock_deps_plugin.git",
+                                     "8816f45ff38cd04d5c7741bd39166af58116dd44"}}]}.
+diff --git a/rel/files/riak.schema b/rel/files/riak.schema
+index bb280b43..1c2c0b9d 100644
+--- a/rel/files/riak.schema
++++ b/rel/files/riak.schema
+@@ -74,6 +74,7 @@
+       undefined -> [];
+       ErrorFilename -> [{lager_file_backend, [{file, ErrorFilename},
+                                               {level, error},
++                                              {formatter, lager_logstash_formatter},
+                                               {size, 10485760},
+                                               {date, "$D0"},
+                                               {count, 5}]}]
+@@ -85,6 +86,7 @@
+     ConsoleHandler = {lager_console_backend, ConsoleLogLevel},
+     ConsoleFileHandler = {lager_file_backend, [{file, ConsoleLogFile},
+                                                {level, ConsoleLogLevel},
++                                               {formatter, lager_logstash_formatter},
+                                                {size, 10485760},
+                                                {date, "$D0"},
+                                                {count, 5}]},
+diff --git a/rel/reltool.config b/rel/reltool.config
+index 14c92513..5a4b97fb 100644
+--- a/rel/reltool.config
++++ b/rel/reltool.config
+@@ -2,10 +2,11 @@
+ %% ex: ft=erlang ts=4 sw=4 et
+ {sys, [
+        {lib_dirs, ["../deps"]},
+-       {rel, "riak", "2.9.0",
++       {rel, "riak", "2.9.1",
+         [
+          kernel,
+          stdlib,
++         lager_logstash_formatter,
+          lager,
+          sasl,
+          public_key,
