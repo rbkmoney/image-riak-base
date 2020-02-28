@@ -22,6 +22,8 @@ cd openssl-${OPENSSL_VERSION}; \
     make install
 
 # Build Erlang
+OLD_CXXFLAGS="${CXXFLAGS}"
+export CPPFLAGS="${CXXFLAGS} -DEPMD6"
 cd /opt
 git clone -n -b $GIT_BRANCH_OTP 'https://github.com/basho/otp.git' $GIT_BRANCH_OTP
 cd $GIT_BRANCH_OTP; git checkout -q $GIT_BRANCH_OTP; \
@@ -30,11 +32,12 @@ cd $GIT_BRANCH_OTP; git checkout -q $GIT_BRANCH_OTP; \
                          --enable-m64-build \
                          --with-ssl=/usr/local/ssl \
                          --without-odbc \
-                         --disable-hipe \
+                         --enable-hipe \
                          --enable-smp-support \
                          --enable-threads \
                          --enable-kernel-poll; \
     make install
+export CPPFLAGS="${OLD_CXXFLAGS}"
 
 # Build image
 mkdir -p "${DEST}"/{etc,run,var,lib64,usr/lib64}/
