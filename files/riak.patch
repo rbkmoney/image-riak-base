@@ -22,7 +22,7 @@ index 977e0b9a..fce421ff 100644
                        "1c533e3366a3c67c466f5d6523bc9c87ecea9400"}},
 +       {lager_logstash_formatter,".*",
 +                 {git,"https://github.com/rbkmoney/lager_logstash_formatter.git",
-+                      "8adc2b6cdc69002badd409a6c6e3f4642d39d684"}},
++                      "687b556a05f86f0c1640db992611cec821451fa4"}},
         {rebar_lock_deps_plugin,".*",
                                 {git,"https://github.com/basho/rebar_lock_deps_plugin.git",
                                      "8816f45ff38cd04d5c7741bd39166af58116dd44"}}]}.
