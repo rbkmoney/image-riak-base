@@ -22,6 +22,7 @@ cd openssl-${OPENSSL_VERSION}; \
     make install
 
 # Build Erlang
+emerge -t dev-util/systemtap
 OLD_CXXFLAGS="${CXXFLAGS}"
 export CPPFLAGS="${CXXFLAGS} -DEPMD6"
 cd /opt
