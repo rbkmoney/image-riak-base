@@ -35,6 +35,7 @@ cd $GIT_BRANCH_OTP; git checkout -q $GIT_BRANCH_OTP; \
                          --enable-hipe \
                          --enable-smp-support \
                          --enable-threads \
+                         --with-dynamic-trace=systemtap \
                          --enable-kernel-poll; \
     make install
 export CPPFLAGS="${OLD_CXXFLAGS}"
@@ -51,7 +52,7 @@ export USE=unconfined
 export ROOT="${DEST}"
 emerge --getbinpkgonly sys-libs/glibc sys-libs/timezone-data
 emerge -t sys-libs/zlib net-libs/libmnl dev-libs/elfutils \
-       sys-apps/busybox app-shells/bash net-misc/curl
+       sys-apps/busybox app-shells/bash net-misc/curl dev-util/systemtap
 
 equery s \*
 # Link logger to busybox to avoid installing util-linux
