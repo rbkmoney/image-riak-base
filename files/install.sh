@@ -13,7 +13,7 @@ export GIT_BRANCH_OTP=basho-otp-16
 
 # Build OpenSSL
 cd /opt
-curl -OL https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz;
+curl -OL https://www.openssl.org/source/old/1.0.2/openssl-${OPENSSL_VERSION}.tar.gz;
 tar -xf openssl-${OPENSSL_VERSION}.tar.gz;
 cd openssl-${OPENSSL_VERSION}; \
     ./config shared no-krb5 -fPIC; \

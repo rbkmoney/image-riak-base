@@ -2,7 +2,3 @@
 	path = build-utils
 	url = git+ssh://git@github.com/rbkmoney/build_utils.git
 	branch = master
-[submodule "riak"]
-	path = riak
-	url = https://github.com/basho/riak.git
-	branch = develop-2.9

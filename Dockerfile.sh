@@ -12,6 +12,7 @@ COPY files/install.sh /
 COPY files/install-riak.sh /
 COPY files/vars.config /
 COPY files/riak.patch /
+COPY files/riak_core.patch /
 COPY files/erlang_otp.patch /
 RUN /install.sh
 RUN /install-riak.sh
