@@ -13,5 +13,5 @@ cd riak
 git checkout -q $GIT_BRANCH_RIAK
 git apply < /riak.patch
 make locked-deps
-git apply < /riak_core.patch
+patch -p 0 < /riak_core.patch
 make rel OVERLAY_VARS="overlay_vars=/vars.config"
