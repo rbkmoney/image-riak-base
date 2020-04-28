@@ -32,6 +32,7 @@ cd $GIT_BRANCH_OTP; git checkout -q $GIT_BRANCH_OTP; \
     ./otp_build setup -a --prefix=/usr/local \
                          --enable-m64-build \
                          --with-ssl=/usr/local/ssl \
+                         --enable-lock-counter \
                          --without-odbc \
                          --enable-hipe \
                          --enable-smp-support \
