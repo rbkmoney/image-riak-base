@@ -30,9 +30,14 @@ git clone -n -b $GIT_BRANCH_OTP 'https://github.com/basho/otp.git' $GIT_BRANCH_O
 cd $GIT_BRANCH_OTP; git checkout -q $GIT_BRANCH_OTP; \
     patch -p 0 < /erlang_otp.patch; \
     ./otp_build setup -a --prefix=/usr/local \
+                         --enable-m64-build \
                          --with-ssl=/usr/local/ssl \
-                         --enable-lock-counter \
-                         --with-dynamic-trace=systemtap; \
+                         --without-odbc \
+                         --enable-hipe \
+                         --enable-smp-support \
+                         --enable-threads \
+                         --with-dynamic-trace=systemtap \
+                         --enable-kernel-poll; \
     make install
 export CPPFLAGS="${OLD_CXXFLAGS}"
 
