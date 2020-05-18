@@ -24,7 +24,7 @@ export PB_PORT=${PB_PORT:-8087}
 export HTTP_PORT=${HTTP_PORT:-8098}
 
 # Use ping to discover our HOSTNAME because it's easier and more reliable than other methods
-export HOST=$(ping -c1 $HOSTNAME | awk '/^PING/ {print $3}' | sed 's/[():]//g')||'127.0.0.1'
+export HOST=${HOST:-$(ping -c1 $HOSTNAME | awk '/^PING/ {print $3}' | sed 's/[():]//g')||'127.0.0.1')}
 
 # CLUSTER_NAME is used to name the nodes and is the value used in the distributed cookie
 export CLUSTER_NAME=${CLUSTER_NAME:-riak}
