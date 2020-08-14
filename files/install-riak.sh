@@ -5,7 +5,7 @@ source /lib/gentoo/functions.sh
 source /etc/portage/make.conf
 
 # Build riak
-export GIT_BRANCH_RIAK=riak-2.9.2
+export GIT_BRANCH_RIAK=riak-2.9.6
 
 cd /opt
 git clone -n -b $GIT_BRANCH_RIAK https://github.com/basho/riak.git riak
