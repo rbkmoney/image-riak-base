@@ -65,4 +65,7 @@ cp /etc/ld.so.conf.d/05gcc-x86_64-pc-linux-gnu.conf \
    "${DEST}/etc/ld.so.conf.d/05gcc-x86_64-pc-linux-gnu.conf"
 ldconfig -r "${DEST}"
 
+# Install Nagios Scripts for monitoring Riak
+emerge net-analyzer/riak_nagios
+
 rm -rf "${DEST}/var/cache/edb"/*
