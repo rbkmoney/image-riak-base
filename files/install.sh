@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e eu
+set -e eu -x
 DEST="/tmp/portage-root"
 
 source /lib/gentoo/functions.sh
