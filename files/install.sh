@@ -9,36 +9,38 @@ GCC_LDPATH="$(gcc-config -L)"
 
 # Build riak
 export OPENSSL_VERSION=1.0.2u
-export GIT_BRANCH_OTP=basho-otp-16
+export BASHO_OTP_COMMIT=f873cae9e03c997c22832162d9b5cd307d35b7e5
 
 # Build OpenSSL
 cd /opt
-curl -OL https://www.openssl.org/source/old/1.0.2/openssl-${OPENSSL_VERSION}.tar.gz;
-tar -xf openssl-${OPENSSL_VERSION}.tar.gz;
-cd openssl-${OPENSSL_VERSION}; \
-    ./config shared no-krb5 -fPIC; \
-    make depend; \
-    make; \
-    make install
+curl -OL "https://www.openssl.org/source/old/1.0.2/openssl-${OPENSSL_VERSION}.tar.gz"
+tar -xf "openssl-${OPENSSL_VERSION}.tar.gz"
+cd "openssl-${OPENSSL_VERSION}"
+./config shared no-krb5 -fPIC
+make depend
+make
+make install
 
 # Build Erlang
 emerge -t dev-util/systemtap
+cd /opt
+curl -L "https://github.com/basho/otp/archive/${BASHO_OTP_COMMIT}.tar.gz" -o basho-otp.tar.gz
+tar -xf basho-otp.tar.gz
+ls
+cd "otp-${BASHO_OTP_COMMIT}"
 OLD_CXXFLAGS="${CXXFLAGS}"
 export CPPFLAGS="${CXXFLAGS} -DEPMD6"
-cd /opt
-git clone -n -b $GIT_BRANCH_OTP 'https://github.com/basho/otp.git' $GIT_BRANCH_OTP
-cd $GIT_BRANCH_OTP; git checkout -q $GIT_BRANCH_OTP; \
-    patch -p 0 < /erlang_otp.patch; \
-    ./otp_build setup -a --prefix=/usr/local \
-                         --enable-m64-build \
-                         --with-ssl=/usr/local/ssl \
-                         --without-odbc \
-                         --enable-hipe \
-                         --enable-smp-support \
-                         --enable-threads \
-                         --with-dynamic-trace=systemtap \
-                         --enable-kernel-poll; \
-    make install
+patch -p 0 < /erlang_otp.patch
+./otp_build setup -a --prefix=/usr/local \
+            --enable-m64-build \
+            --with-ssl=/usr/local/ssl \
+            --without-odbc \
+            --enable-hipe \
+            --enable-smp-support \
+            --enable-threads \
+            --with-dynamic-trace=systemtap \
+            --enable-kernel-poll
+make install
 export CPPFLAGS="${OLD_CXXFLAGS}"
 
 # Build image
