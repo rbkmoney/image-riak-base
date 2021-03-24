@@ -43,6 +43,8 @@ patch -p 0 < /erlang_otp.patch
 make install
 export CPPFLAGS="${OLD_CXXFLAGS}"
 
+quickpkg debianutils
+
 # Build image
 mkdir -p "${DEST}"/{etc,run,var,lib64,usr/lib64}/
 ln -s /run "${DEST}/var/run"
