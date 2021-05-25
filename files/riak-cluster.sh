@@ -32,7 +32,7 @@ export CLUSTER_NAME=${CLUSTER_NAME:-riak}
 
 # The COORDINATOR_NODE is the first node in a cluster to which other nodes will eventually join
 export COORDINATOR_NODE=${COORDINATOR_NODE:-$HOSTNAME}
-export COORDINATOR_NODE_HOST=$(ping -c1 $COORDINATOR_NODE | awk '/^PING/ {print $3}' | sed 's/[():]//g')||'127.0.0.1'
+export COORDINATOR_NODE_HOST=$(ping -c1 $COORDINATOR_NODE | awk '/^PING/ {print $3}' | sed -e 's/[()]//g' -e 's/:$//') || '127.0.0.1'
 
 # Run all prestart scripts
 PRESTART=$(find /etc/riak/prestart.d -name *.sh -print | sort)
