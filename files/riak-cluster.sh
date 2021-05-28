@@ -41,7 +41,10 @@ for s in $PRESTART; do
 done
 
 # Start the node and wait until fully up
-$RIAK start
+# `riak start` command can be configured through env variables (e.g, WAIT_FOR_ERLANG).
+# However, `riak` resets all env variables if the user is different from riak.
+# So let's use su to pass the current environment into `riak` script.
+su riak -c "$RIAK start"
 $RIAK_ADMIN wait-for-service riak_kv
 
 # Run all poststart scripts
