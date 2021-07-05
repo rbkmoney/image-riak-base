@@ -5,13 +5,11 @@ source /lib/gentoo/functions.sh
 source /etc/portage/make.conf
 
 # Build riak
-export GIT_BRANCH_RIAK=riak-2.9.7
-
-cd /opt
-git clone -n -b $GIT_BRANCH_RIAK https://github.com/basho/riak.git riak
-cd riak
-git checkout -q $GIT_BRANCH_RIAK
+mkdir -p /opt/riak
+cd /opt/riak
+curl -L -o riak.tar.gz https://github.com/basho/riak/archive/refs/tags/riak-${RIAK_VERSION}.tar.gz
+echo "${RIAK_VERSION_HASH}  riak.tar.gz" | sha1sum -c -
+tar xzf riak.tar.gz --strip-components=1
 git apply < /riak.patch
 make locked-deps
-patch -p 0 < /riak_core.patch
 make rel OVERLAY_VARS="overlay_vars=/vars.config"

@@ -54,7 +54,7 @@ index 14c92513..5a4b97fb 100644
  %% ex: ft=erlang ts=4 sw=4 et
  {sys, [
         {lib_dirs, ["../deps"]},
-        {rel, "riak", "2.9.6",
+        {rel, "riak", "2.9.8",
          [
           kernel,
           stdlib,

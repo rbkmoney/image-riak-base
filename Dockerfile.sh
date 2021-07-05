@@ -12,7 +12,6 @@ COPY files/install.sh /
 COPY files/install-riak.sh /
 COPY files/vars.config /
 COPY files/riak.patch /
-COPY files/riak_core.patch /
 COPY files/erlang_otp.patch /
 RUN /install.sh
 RUN /install-riak.sh
@@ -65,7 +64,8 @@ VOLUME /var/lib/riak
 # Prepare for bootstrapping schemas
 RUN mkdir -p /etc/riak/schemas
 
-ENV RIAK_VERSION 2.9.1
+ENV RIAK_VERSION 2.9.8
+ENV RIAK_VERSION_HASH c202addd7e25f23d4c9b94cde9bf1ceb9f2aef64
 ENV RIAK_HOME /usr/lib/riak
 ENV RIAK_FLAVOR KV
 
