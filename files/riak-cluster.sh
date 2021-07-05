@@ -32,7 +32,7 @@ export CLUSTER_NAME=${CLUSTER_NAME:-riak}
 
 # The COORDINATOR_NODE is the first node in a cluster to which other nodes will eventually join
 export COORDINATOR_NODE=${COORDINATOR_NODE:-$HOSTNAME}
-export COORDINATOR_NODE_HOST=$(ping -c1 $COORDINATOR_NODE | awk '/^PING/ {print $3}' | sed 's/[():]//g')||'127.0.0.1'
+export COORDINATOR_NODE_HOST=$(ping -c1 $COORDINATOR_NODE | awk '/^PING/ {print $3}' | sed -e 's/[()]//g' -e 's/:$//') || '127.0.0.1'
 
 # Run all prestart scripts
 PRESTART=$(find /etc/riak/prestart.d -name *.sh -print | sort)
@@ -50,10 +50,17 @@ for s in $POSTSTART; do
   . $s
 done
 
-# Trap SIGTERM and SIGINT and tail the log file indefinitely
-tail -n 1024 -f /var/log/riak/console.log &
-PID=$!
-trap "$RIAK stop; kill $PID" SIGTERM SIGINT
+SIGTERM_TRAP_CMD="set -x ; $RIAK stop"
+
+# Tail the log file indefinitely if asked to
+if [[ -n "${RUNNER_TAIL_LOGS}" ]]; then
+  tail -n 1024 -f /var/log/riak/console.log &
+  RUNNER_TAIL_LOGGER_PID=$!
+  SIGTERM_TRAP_CMD="$SIGTERM_TRAP_CMD ; kill $RUNNER_TAIL_LOGGER_PID"
+fi
+
+# Trap SIGTERM and SIGINT
+trap "$SIGTERM_TRAP_CMD" SIGTERM SIGINT
 
 # avoid log spamming and unnecessary exit once `riak ping` fails
 set +ex
