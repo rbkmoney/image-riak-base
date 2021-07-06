@@ -7,6 +7,10 @@ source /etc/portage/make.conf
 
 GCC_LDPATH="$(gcc-config -L)"
 
+export USE=unconfined
+emerge -uDN world --backtrack=50 --exclude go --exclude baselayout
+emerge -t dev-util/systemtap
+
 # Build riak
 export OPENSSL_VERSION=1.0.2u
 export BASHO_OTP_COMMIT=f873cae9e03c997c22832162d9b5cd307d35b7e5
@@ -22,7 +26,6 @@ make
 make install
 
 # Build Erlang
-emerge -t dev-util/systemtap
 cd /opt
 curl -L "https://github.com/basho/otp/archive/${BASHO_OTP_COMMIT}.tar.gz" -o basho-otp.tar.gz
 tar -xf basho-otp.tar.gz

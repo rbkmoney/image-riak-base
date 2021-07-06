@@ -42,7 +42,7 @@ Dockerfile: Dockerfile.sh
 	./Dockerfile.sh > Dockerfile
 
 .state: Dockerfile $(REPOS)
-	docker build -t $(SERVICE_IMAGE_NAME):$(TAG) .
+	docker build --no-cache -t $(SERVICE_IMAGE_NAME):$(TAG) .
 	echo $(TAG) > $@
 
 test:
