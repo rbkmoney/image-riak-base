@@ -7,8 +7,7 @@ source /etc/portage/make.conf
 
 GCC_LDPATH="$(gcc-config -L)"
 
-export USE=unconfined
-emerge -uDN world --backtrack=50 --exclude go --exclude baselayout
+export USE="unconfined -make-symlinks"
 emerge -t dev-util/systemtap
 
 # Build riak

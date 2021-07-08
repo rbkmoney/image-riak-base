@@ -1,6 +1,6 @@
 #!/bin/sh
 cat <<EOF
-FROM ${REGISTRY}/${ORG_NAME}/build:${BUILD_IMAGE_TAG} as build
+FROM ${REGISTRY}/${ORG_NAME}/base:${BUILD_IMAGE_TAG} as build
 RUN rm -r /etc/portage/repos.conf/*.conf \
     /etc/portage/savedconfig/* \
     /etc/portage/package.mask/*
