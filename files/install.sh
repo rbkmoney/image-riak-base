@@ -31,7 +31,8 @@ tar -xf basho-otp.tar.gz
 ls
 cd "otp-${BASHO_OTP_COMMIT}"
 OLD_CXXFLAGS="${CXXFLAGS}"
-export CPPFLAGS="${CXXFLAGS} -DEPMD6"
+export CPPFLAGS="${CXXFLAGS} -DEPMD6" \
+       LDFLAGS="-Wl,--allow-multiple-definition"
 patch -p 0 < /erlang_otp.patch
 ./otp_build setup -a --prefix=/usr/local \
             --enable-m64-build \
