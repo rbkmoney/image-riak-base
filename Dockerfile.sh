@@ -8,12 +8,14 @@ COPY files/portage/ /etc/portage
 COPY portage/ /usr/portage
 COPY overlays/ /var/lib/layman
 
+ENV RIAK_VERSION 3.0.7
+ENV RIAK_HOME /usr/lib/riak
+ENV RIAK_FLAVOR KV
+
 COPY files/install.sh /
 COPY files/install-riak.sh /
 COPY files/vars.config /
 COPY files/riak.patch /
-COPY files/riak_core.patch /
-COPY files/erlang_otp.patch /
 RUN /install.sh
 RUN /install-riak.sh
 
@@ -64,10 +66,6 @@ VOLUME /var/lib/riak
 
 # Prepare for bootstrapping schemas
 RUN mkdir -p /etc/riak/schemas
-
-ENV RIAK_VERSION 2.9.1
-ENV RIAK_HOME /usr/lib/riak
-ENV RIAK_FLAVOR KV
 
 WORKDIR /var/lib/riak
 RUN chmod a+x /riak-cluster.sh
