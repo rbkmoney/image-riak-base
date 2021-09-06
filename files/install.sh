@@ -9,7 +9,7 @@ GCC_LDPATH="$(gcc-config -L)"
 
 # Build Erlang
 echo dev-lang/erlang::rbkmoney ~amd64 >> /etc/portage/package.accept_keywords/erlang
-emerge -t =dev-lang/erlang-22.1.8-r1::rbkmoney
+emerge -t =dev-lang/erlang-22.3.4.21::rbkmoney
 
 quickpkg debianutils
 
