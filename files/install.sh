@@ -8,10 +8,8 @@ source /etc/portage/make.conf
 GCC_LDPATH="$(gcc-config -L)"
 
 # Build Erlang
-OLD_CXXFLAGS="${CXXFLAGS}"
-export CPPFLAGS="${CXXFLAGS} -DEPMD6"
-emerge -t dev-lang/erlang::rbkmoney
-export CPPFLAGS="${OLD_CXXFLAGS}"
+echo dev-lang/erlang::rbkmoney ~amd64 >> /etc/portage/package.accept_keywords/erlang
+emerge -t =dev-lang/erlang-22.1.8-r1::rbkmoney
 
 quickpkg debianutils
 
