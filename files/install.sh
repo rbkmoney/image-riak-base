@@ -25,7 +25,7 @@ export USE=unconfined
 export ROOT="${DEST}"
 emerge --getbinpkgonly sys-libs/glibc sys-libs/timezone-data
 emerge -t sys-libs/zlib net-libs/libmnl dev-libs/elfutils \
-       sys-apps/busybox app-shells/bash net-misc/curl dev-util/systemtap
+       sys-apps/busybox app-shells/bash net-misc/curl
 
 equery s \*
 # Link logger to busybox to avoid installing util-linux
