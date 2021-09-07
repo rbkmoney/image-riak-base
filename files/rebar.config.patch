@@ -1,0 +1,23 @@
+--- rebar.config.orig	2021-09-07 16:28:56.000000000 +0300
++++ rebar.config	2021-09-07 16:36:15.000000000 +0300
+@@ -17,8 +17,10 @@
+ 
+         % {yokozuna, {git, "git://github.com/basho/yokozuna.git", {branch, "develop-3.0"}}},
+ 
+-        {riak_repl, {git, "git://github.com/basho/riak_repl.git", {tag, "riak_kv-3.0.7"}}}
+-      ]}.
++        {riak_repl, {git, "git://github.com/basho/riak_repl.git", {tag, "riak_kv-3.0.7"}}},
++
++        {lager_logstash_formatter, ".*", {git, "https://github.com/rbkmoney/lager_logstash_formatter.git", {branch, "riak-2.9"}}}
++]}.
+ 
+ {project_plugins, [
+     {rebar3_cuttlefish, {git, "https://github.com/basho/rebar3_cuttlefish", {tag, "0.2.0"}}}
+@@ -51,6 +53,7 @@
+      stdlib,
+      lager,
+      lager_syslog,
++     lager_logstash_formatter,
+      sasl,
+      public_key,
+      ssl,

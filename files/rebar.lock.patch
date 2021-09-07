@@ -1,0 +1,44 @@
+--- rebar.lock.orig	2021-09-07 16:29:06.000000000 +0300
++++ rebar.lock	2021-09-07 16:39:58.000000000 +0300
+@@ -1,4 +1,4 @@
+-{"1.1.0",
++{"1.2.0",
+ [{<<"basho_stats">>,
+   {git,"git://github.com/basho/basho_stats.git",
+        {ref,"c5b7ecb92af7b050bc62d08c6fbf1aafd6bdeff0"}},
+@@ -51,6 +51,10 @@
+   {git,"git://github.com/basho/ibrowse.git",
+        {ref,"cdde6fe5e80ce71e7b5570e40a45d9f862721499"}},
+   2},
++ {<<"jsx">>,
++  {git,"https://github.com/talentdeficit/jsx.git",
++       {ref,"47ce39f040b5da98794008bf0126c8a68760d786"}},
++  1},
+  {<<"kv_index_tictactree">>,
+   {git,"https://github.com/martinsumner/kv_index_tictactree.git",
+        {ref,"e1f580a908014bdc2461198dd8f5e8012ec152c1"}},
+@@ -59,6 +63,10 @@
+   {git,"git://github.com/erlang-lager/lager.git",
+        {ref,"22e62f28e5afabe90a6f31bcde367a2b5799fc94"}},
+   1},
++ {<<"lager_logstash_formatter">>,
++  {git,"https://github.com/rbkmoney/lager_logstash_formatter.git",
++       {ref,"687b556a05f86f0c1640db992611cec821451fa4"}},
++  0},
+  {<<"lager_syslog">>,
+   {git,"git://github.com/basho/lager_syslog.git",
+        {ref,"152bb8eb254c225ebd8c579f9603f44b50df44ec"}},
+@@ -180,5 +188,12 @@
+  {<<"goldrush">>, <<"F06E5D5F1277DA5C413E84D5A2924174182FB108DABB39D5EC548B27424CD106">>},
+  {<<"hut">>, <<"08D46679523043424870723923971889E8A34D63B2F946A35B46CF921D1236E7">>},
+  {<<"parse_trans">>, <<"09765507A3C7590A784615CFD421D101AEC25098D50B89D7AA1D66646BC571C1">>},
+- {<<"setup">>, <<"1203F4CDA11306C2E34434244576DED0A7BBFB0908D9A572356C809BD0CDF085">>}]}
++ {<<"setup">>, <<"1203F4CDA11306C2E34434244576DED0A7BBFB0908D9A572356C809BD0CDF085">>}]},
++{pkg_hash_ext,[
++ {<<"bear">>, <<"534217DCE6A719D59E54FB0EB7A367900DBFC5F85757E8C1F94269DF383F6D9B">>},
++ {<<"folsom">>, <<"F7B644FC002A75AF00B8BFBD3CC5C2BD955E09A118D2982D9A6C04E5646FF367">>},
++ {<<"goldrush">>, <<"99CB4128CFFCB3227581E5D4D803D5413FA643F4EB96523F77D9E6937D994CEB">>},
++ {<<"hut">>, <<"953FC447514BAF9CC79FA147D66469243C94DFA1593779614E070C692D0BF0F3">>},
++ {<<"parse_trans">>, <<"17EF63ABDE837AD30680EA7F857DD9E7CED9476CDD7B0394432AF4BFC241B960">>},
++ {<<"setup">>, <<"7D6AAF5281D0B0C40980E128F9DC410DACD03799A8577201D4C8B43E7F97509A">>}]}
+ ].

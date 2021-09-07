@@ -6,3 +6,4 @@ overlays
 .DS_Store
 Dockerfile
 .*.sw?
+riak.tar.gz
