@@ -32,7 +32,6 @@ COPY files/riak-cluster.sh /tmp/portage-root/riak-cluster.sh
 # Riak image
 FROM scratch
 COPY --from=build /tmp/portage-root/ /
-COPY --from=build /usr/local/ssl /usr/local
 
 # Prepare directrories
 RUN mkdir -p /etc/riak/schemas /etc/riak/prestart.d /etc/riak/poststart.d \
@@ -67,9 +66,6 @@ RUN adduser -u 0 -g wheel -D -h /root root; \
 # Expose volumes for data and logs
 VOLUME /var/log/riak
 VOLUME /var/lib/riak
-
-# Prepare for bootstrapping schemas
-RUN mkdir -p /etc/riak/schemas
 
 WORKDIR /var/lib/riak
 RUN chmod a+x /riak-cluster.sh
