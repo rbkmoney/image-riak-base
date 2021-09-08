@@ -8,7 +8,8 @@ COPY files/portage/ /etc/portage
 COPY portage/ /usr/portage
 COPY overlays/ /var/lib/layman
 
-ENV RIAK_VERSION 3.0.7
+ARG riak_version
+ARG riak_version_hash
 ENV RIAK_HOME /usr/lib/riak
 ENV RIAK_FLAVOR KV
 
@@ -44,7 +45,7 @@ COPY --from=build /opt/riak/_build/rel/rel/riak/etc/* /etc/riak/
 COPY --from=build /opt/riak/_build/rel/rel/riak/erts-10.7.2.13 /usr/lib/riak/erts-10.7.2.13
 COPY --from=build /opt/riak/_build/rel/rel/riak/lib /usr/lib/riak/lib
 COPY --from=build /opt/riak/_build/rel/rel/riak/releases /usr/lib/riak/releases
-COPY --from=build /opt/riak/_build/rel/rel/riak/share /usr/lib/riak/share
+COPY --from=build /opt/riak/_build/rel/rel/riak/share/schema/* /etc/riak/schemas/
 
 RUN busybox --install
 LABEL com.rbkmoney.${SERVICE_NAME}.parent=null \
@@ -66,6 +67,9 @@ RUN adduser -u 0 -g wheel -D -h /root root; \
 # Expose volumes for data and logs
 VOLUME /var/log/riak
 VOLUME /var/lib/riak
+
+ENV RIAK_HOME /usr/lib/riak
+ENV RIAK_FLAVOR KV
 
 WORKDIR /var/lib/riak
 RUN chmod a+x /riak-cluster.sh

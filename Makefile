@@ -4,6 +4,9 @@ BUILD_IMAGE_TAG := 25c031edd46040a8745334570940a0f0b2154c5c
 PORTAGE_REF := d9257374c6dc66cf541887f5a3273c4459a0c844
 OVERLAYS_RBKMONEY_REF := 8ca2cde4d5781b71c289aa8b76b0d4fbcf2a999c
 
+RIAK_VERSION := 3.0.7
+RIAK_VERSION_HASH := 6b061612f538e2f40f58d762c1ce62ec68ea9f3a
+
 .PHONY: $(SERVICE_NAME) push submodules repos
 $(SERVICE_NAME): .state
 
@@ -42,7 +45,9 @@ Dockerfile: Dockerfile.sh
 	./Dockerfile.sh > Dockerfile
 
 .state: Dockerfile $(REPOS)
-	docker build -t $(SERVICE_IMAGE_NAME):$(TAG) .
+	docker build --build-arg riak_version=$(RIAK_VERSION) \
+	--build-arg riak_version_hash=$(RIAK_VERSION_HASH) \
+	-t $(SERVICE_IMAGE_NAME):$(TAG) .
 	echo $(TAG) > $@
 
 test:
