@@ -36,8 +36,8 @@ for s in $PRESTART; do
 done
 
 # Start the node and wait until fully up
-$(RIAK) start
-$(RIAK) admin wait-for-service riak_kv
+$RIAK start
+$RIAK admin wait-for-service riak_kv
 
 # Run all poststart scripts
 POSTSTART=$(find /etc/riak/poststart.d -name *.sh -print | sort)
@@ -61,7 +61,7 @@ trap "$SIGTERM_TRAP_CMD" SIGTERM SIGINT
 set +ex
 while :
 do
-  $(RIAK) ping >/dev/null 2>&1
+  $RIAK ping >/dev/null 2>&1
   if [ $? -ne 0 ]; then
     exit 1
   fi
