@@ -13,12 +13,7 @@ fi
 export RIAK_CONF=/etc/riak/riak.conf
 export USER_CONF=/etc/riak/user.conf
 export RIAK_ADVANCED_CONF=/etc/riak/advanced.config
-if [[ -x /usr/sbin/riak-admin ]]; then
-  export RIAK_ADMIN=/usr/sbin/riak-admin
-else
-  export RIAK_ADMIN=$RIAK_HOME/bin/riak-admin
-fi
-export SCHEMAS_DIR=/etc/riak/schemas/
+export SCHEMAS_DIR=/usr/lib/riak/share/schema/
 
 # Set ports for PB and HTTP
 export PB_PORT=${PB_PORT:-8087}
@@ -41,8 +36,8 @@ for s in $PRESTART; do
 done
 
 # Start the node and wait until fully up
-$RIAK start
-$RIAK_ADMIN wait-for-service riak_kv
+$(RIAK) start
+$(RIAK) admin wait-for-service riak_kv
 
 # Run all poststart scripts
 POSTSTART=$(find /etc/riak/poststart.d -name *.sh -print | sort)
@@ -66,7 +61,7 @@ trap "$SIGTERM_TRAP_CMD" SIGTERM SIGINT
 set +ex
 while :
 do
-  riak ping >/dev/null 2>&1
+  $(RIAK) ping >/dev/null 2>&1
   if [ $? -ne 0 ]; then
     exit 1
   fi

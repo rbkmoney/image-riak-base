@@ -35,17 +35,17 @@ FROM scratch
 COPY --from=build /tmp/portage-root/ /
 
 # Prepare directrories
-RUN mkdir -p /etc/riak/schemas /etc/riak/prestart.d /etc/riak/poststart.d \
+RUN mkdir -p /etc/riak/prestart.d /etc/riak/poststart.d \
     /usr/lib/riak/ /var/lib/riak /var/log/riak
 
 # Copy riak sources
-COPY --from=build /opt/riak/_build/rel/rel/riak/bin /usr/lib/riak/bin
-COPY --from=build /opt/riak/_build/rel/rel/riak/bin/riak* /usr/bin/
-COPY --from=build /opt/riak/_build/rel/rel/riak/etc/* /etc/riak/
-COPY --from=build /opt/riak/_build/rel/rel/riak/erts-10.7.2.13 /usr/lib/riak/erts-10.7.2.13
-COPY --from=build /opt/riak/_build/rel/rel/riak/lib /usr/lib/riak/lib
-COPY --from=build /opt/riak/_build/rel/rel/riak/releases /usr/lib/riak/releases
-COPY --from=build /opt/riak/_build/rel/rel/riak/share/schema/* /etc/riak/schemas/
+COPY --from=build /opt/riak/rel/riak/lib /usr/lib/riak/lib
+COPY --from=build /opt/riak/rel/riak/share /usr/lib/riak/share
+COPY --from=build /opt/riak/rel/riak/erts-10.7.2.13 /usr/lib/riak/erts-10.7.2.13
+COPY --from=build /opt/riak/rel/riak/releases /usr/lib/riak/releases
+COPY --from=build /opt/riak/rel/riak/bin /usr/lib/riak/bin
+COPY --from=build /opt/riak/rel/riak/etc/* /etc/riak/
+COPY --from=build /opt/riak/rel/riak/data/* /var/lib/riak/data/
 
 RUN busybox --install
 LABEL com.rbkmoney.${SERVICE_NAME}.parent=null \
@@ -70,6 +70,11 @@ VOLUME /var/lib/riak
 
 ENV RIAK_HOME /usr/lib/riak
 ENV RIAK_FLAVOR KV
+
+# HACKS to make image work as desired
+RUN echo "hosts:    files dns" > /etc/nsswitch.conf
+RUN ln -s /usr/lib/riak/bin/riak /usr/sbin/riak
+# HACKS to make image work as desired
 
 WORKDIR /var/lib/riak
 RUN chmod a+x /riak-cluster.sh
