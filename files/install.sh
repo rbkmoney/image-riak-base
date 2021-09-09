@@ -11,7 +11,8 @@ GCC_LDPATH="$(gcc-config -L)"
 echo dev-lang/erlang::rbkmoney ~amd64 >> /etc/portage/package.accept_keywords/erlang
 emerge -t =dev-lang/erlang-22.3.4.21::rbkmoney
 
-quickpkg debianutils sys-libs/glibc sys-libs/timezone-data
+quickpkg --include-config=y sys-libs/glibc sys-libs/timezone-data \
+	 sys-apps/debianutils sys-libs/zlib net-misc/curl
 
 # Build image
 mkdir -p "${DEST}"/{etc,run,var,lib64,usr/lib64}/

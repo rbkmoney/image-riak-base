@@ -72,7 +72,6 @@ ENV RIAK_HOME /usr/lib/riak
 ENV RIAK_FLAVOR KV
 
 # HACKS to make image work as desired
-RUN echo "hosts:    files dns" > /etc/nsswitch.conf
 RUN ln -s /usr/lib/riak/bin/riak /usr/sbin/riak
 # HACKS to make image work as desired
 
