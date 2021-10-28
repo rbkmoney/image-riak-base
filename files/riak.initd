@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+# Copyright 1999-2021 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+description="Riak KV Database"
+user=riak
+command="/usr/sbin/riak"
+command_args="start"
+pidfile="/run/riak.pid"
+rc_ulimit=${rc_ulimit-"-n 65536"}
+rc_start_wait=120
+
+depend() {
+    need net
+    need epmd
+}
+
+stop() {
+    ebegin "Stopping ${RC_SVCNAME}"
+    /usr/sbin/riak stop
+    eend $? "Failed to stop ${RC_SVCNAME}"
+}

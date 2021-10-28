@@ -27,7 +27,7 @@ COPY files/prestart.d /tmp/portage-root/etc/riak/prestart.d
 COPY files/poststart.d /tmp/portage-root/etc/riak/poststart.d
 
 # Install custom start script
-COPY files/riak-cluster.sh /tmp/portage-root/riak-cluster.sh
+# COPY files/riak-cluster.sh /tmp/portage-root/riak-cluster.sh
 
 #####################################################################
 # Riak image
@@ -60,23 +60,33 @@ EXPOSE 8098
 
 # Create riak user/group
 RUN touch /etc/group /etc/passwd
-RUN adduser -u 0 -g wheel -D -h /root root; \
-    adduser -u 102 -g riak -D -h /var/lib/riak riak; \
+RUN adduser root -u 0 -g wheel -D -h /root && \
+    adduser riak -u 102 -g riak -D -h /var/lib/riak && \
     chown -R riak:riak /var/lib/riak /var/log/riak
-
-# Expose volumes for data and logs
-VOLUME /var/log/riak
-VOLUME /var/lib/riak
-
-ENV RIAK_HOME /usr/lib/riak
-ENV RIAK_FLAVOR KV
+RUN adduser epmd -u 103 -g epmd -D -h /dev/null
 
 # HACKS to make image work as desired
 RUN ln -s /usr/lib/riak/bin/riak /usr/sbin/riak
 # HACKS to make image work as desired
 
-WORKDIR /var/lib/riak
-RUN chmod a+x /riak-cluster.sh
-CMD ["/riak-cluster.sh"]
+COPY files/riak.initd /etc/init.d/riak
+RUN chmod 755 /etc/init.d/riak
+COPY files/rc.conf /etc/rc.conf
+RUN rm /etc/runlevels/sysinit/* /etc/runlevels/boot/*
+RUN sed -i 's/cgroup_add_service /# cgroup_add_service /g' \
+    /lib/rc/sh/openrc-run.sh 
+RUN rc-update add riak default
+CMD ["/sbin/openrc-init"]
+
+# Expose volumes for data and logs
+VOLUME /var/log/riak
+VOLUME /var/lib/riak
+
+# ENV RIAK_HOME /usr/lib/riak
+# ENV RIAK_FLAVOR KV
+
+# WORKDIR /var/lib/riak
+# RUN chmod a+x /riak-cluster.sh
+# CMD ["/riak-cluster.sh"]
 
 EOF

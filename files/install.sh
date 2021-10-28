@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e eu -x
+# set -e eu -x
+set -x
 DEST="/tmp/portage-root"
 
 source /lib/gentoo/functions.sh
@@ -15,19 +16,22 @@ quickpkg --include-config=y sys-libs/glibc sys-libs/timezone-data \
 	 sys-apps/debianutils sys-libs/zlib net-misc/curl
 
 # Build image
-mkdir -p "${DEST}"/{etc,run,var,lib64,usr/lib64}/
+mkdir -p "${DEST}"/{etc,run,var,lib,lib64,usr/lib,usr/lib64}/
 ln -s /run "${DEST}/var/run"
-ln -s /lib64 "${DEST}/lib"
-ln -s /usr/lib64 "${DEST}/usr/lib64"
 
 echo 'Europe/Moscow' > "${DEST}"/etc/timezone
 
 export USE=unconfined
+emerge --buildpkgonly sys-apps/openrc
 export ROOT="${DEST}"
+ls -la "${DEST}/lib" "${DEST}/lib"/*
 emerge --getbinpkgonly sys-libs/glibc sys-libs/timezone-data
 emerge -t sys-libs/zlib net-libs/libmnl dev-libs/elfutils \
        sys-apps/busybox app-shells/bash net-misc/curl
 
+ls -la "${DEST}/lib" "${DEST}/lib"/*
+emerge --quiet-build=n --verbose sys-apps/openrc
+ls -la "${DEST}/lib" "${DEST}/lib"/*
 equery s \*
 # Link logger to busybox to avoid installing util-linux
 ln -s -f /bin/busybox "${DEST}/usr/bin/logger"
