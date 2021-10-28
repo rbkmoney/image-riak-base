@@ -70,6 +70,7 @@ RUN ln -s /usr/lib/riak/bin/riak /usr/sbin/riak
 # HACKS to make image work as desired
 
 COPY files/riak.initd /etc/init.d/riak
+COPY files/epmd.confd /etc/conf.d/epmd
 RUN chmod 755 /etc/init.d/riak
 COPY files/rc.conf /etc/rc.conf
 RUN rm /etc/runlevels/sysinit/* /etc/runlevels/boot/*
