@@ -10,8 +10,6 @@ COPY overlays/ /var/lib/layman
 
 ARG riak_version
 ARG riak_version_hash
-ENV RIAK_HOME /usr/lib/riak
-ENV RIAK_FLAVOR KV
 
 COPY files/install.sh /
 RUN /install.sh
@@ -70,8 +68,7 @@ RUN adduser -u 0 -g wheel -D -h /root root; \
 VOLUME /var/log/riak
 VOLUME /var/lib/riak
 
-#ENV RIAK_HOME /usr/lib/riak
-#ENV RIAK_FLAVOR KV
+ENV RIAK_HOME /usr/lib/riak
 
 WORKDIR /var/lib/riak
 RUN chmod a+x /riak-cluster.sh

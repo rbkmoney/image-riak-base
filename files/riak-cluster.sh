@@ -14,6 +14,7 @@ export RIAK_CONF=/etc/riak/riak.conf
 export USER_CONF=/etc/riak/user.conf
 export RIAK_ADVANCED_CONF=/etc/riak/advanced.config
 export SCHEMAS_DIR=/usr/lib/riak/share/schema/
+export RIAK_ADMIN="$RIAK admin"
 
 # Set ports for PB and HTTP
 export PB_PORT=${PB_PORT:-8087}
@@ -36,7 +37,6 @@ for s in $PRESTART; do
 done
 
 $RIAK start
-$RIAK admin wait-for-service riak_kv
 
 # Run all poststart scripts
 POSTSTART=$(find /etc/riak/poststart.d -name *.sh -print | sort)
