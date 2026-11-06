@@ -1,11 +1,12 @@
 UTILS_PATH := build-utils
 SERVICE_NAME := riak-base
-BUILD_IMAGE_TAG := 25c031edd46040a8745334570940a0f0b2154c5c
-PORTAGE_REF := d9257374c6dc66cf541887f5a3273c4459a0c844
-OVERLAYS_RBKMONEY_REF := 6740592c44b3312f492fbd765c7338b5c4347ff0
+ORG_NAME := xpay_rbk
+BUILD_IMAGE_TAG := 2dd1d2f13ef145ae5084170c50dbeb478e683474
+PORTAGE_REF := e1cd9e723e70a4c457d190f0d498c6e79b9466da
+OVERLAYS_XPAY_REF := 04805dc8396b6e4046726a78e9d86a8e8529a6b4
 
 RIAK_VERSION := 3.0.9
-RIAK_VERSION_HASH := d5d397f1694ad098081fdc466fc58d3f4c58345e
+RIAK_VERSION_HASH := ed5c0a7205c1a4ef63d479f21b77b476aaeb32a0ee425081e35d0b83bc7eb7b6
 
 .PHONY: $(SERVICE_NAME) push submodules repos
 $(SERVICE_NAME): .state
@@ -26,7 +27,7 @@ fi)
 
 SUBMODULES = $(UTILS_PATH)
 SUBTARGETS = $(patsubst %,%/.git,$(SUBMODULES))
-REPOS = portage overlays/rbkmoney
+REPOS = portage overlays/xpay
 
 $(SUBTARGETS):
 	$(eval SSH_PRIVKEY := $(shell echo $(GITHUB_PRIVKEY) | sed -e 's|%|%%|g'))
@@ -38,7 +39,7 @@ submodules: $(SUBTARGETS)
 
 repos: $(REPOS)
 
-Dockerfile: Dockerfile.sh
+Dockerfile: Dockerfile.sh Makefile
 	REGISTRY=$(REGISTRY) ORG_NAME=$(ORG_NAME) \
 	BUILD_IMAGE_TAG=$(BUILD_IMAGE_TAG) \
 	COMMIT=$(COMMIT) BRANCH=$(BRANCH) \
@@ -52,7 +53,7 @@ Dockerfile: Dockerfile.sh
 
 test:
 	$(DOCKER) run "$(SERVICE_IMAGE_NAME):$(shell cat .state)" \
-	bash -c "bash --version; ip addr"
+	bash -c "riak version; ip addr"
 
 push:
 	$(DOCKER) push "$(SERVICE_IMAGE_NAME):$(shell cat .state)"

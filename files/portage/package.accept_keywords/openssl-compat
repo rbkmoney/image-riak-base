@@ -1,0 +1,2 @@
+# OpenSSL 1.1 compat build for the OTP 22 erlang (riak 3.0.9)
+dev-libs/openssl-compat ~amd64

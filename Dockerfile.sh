@@ -1,12 +1,12 @@
 #!/bin/sh
 cat <<EOF
 FROM ${REGISTRY}/${ORG_NAME}/build:${BUILD_IMAGE_TAG} as build
-RUN rm -r /etc/portage/repos.conf/*.conf \
+RUN rm -fr /etc/portage/repos.conf/*.conf \
     /etc/portage/savedconfig/* \
     /etc/portage/package.mask/*
 COPY files/portage/ /etc/portage
-COPY portage/ /usr/portage
-COPY overlays/ /var/lib/layman
+COPY portage/ /var/db/repos/gentoo
+COPY overlays/xpay /var/db/repos/xpay
 
 ARG riak_version
 ARG riak_version_hash
@@ -19,6 +19,7 @@ COPY files/vars.config /
 COPY files/rebar.config.patch /
 COPY files/rebar.lock.patch /
 COPY files/riak.schema.patch /
+COPY files/check_node_wrapper /tmp/data/
 RUN /install-riak.sh
 
 # Install custom hooks
@@ -46,6 +47,10 @@ COPY --from=build /opt/riak/_build/deb/rel/riak/bin /usr/lib/riak/bin
 COPY --from=build /opt/riak/_build/deb/rel/riak/etc/* /etc/riak/
 COPY --from=build /opt/riak/_build/deb/rel/riak/data/* /var/lib/riak/data/
 COPY --from=build /opt/riak/_build/deb/rel/riak/usr/bin/* /usr/sbin/
+RUN ln -sf /usr/lib/riak/bin/riak-admin /usr/sbin/riak-admin && \
+    ln -sf /usr/lib/riak/bin/riak-chkconfig /usr/sbin/riak-chkconfig && \
+    ln -sf /usr/lib/riak/bin/riak-debug /usr/sbin/riak-debug && \
+    ln -sf /usr/lib/riak/bin/riak-repl /usr/sbin/riak-repl
 
 RUN busybox --install
 LABEL com.rbkmoney.${SERVICE_NAME}.parent=null \

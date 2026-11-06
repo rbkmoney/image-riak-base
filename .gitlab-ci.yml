@@ -1,0 +1,85 @@
+# Runs on the shell runner (tag: shell): docker comes from the host,
+# nothing is installed per-job.
+include:
+  - project: xpay_rbk/build_utils
+    file: gitlab-ci-lib/container-scanning.gitlab-ci.yml
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+variables:
+  SCAN_MR: "1"
+
+stages:
+  - build
+  - test
+  - deploy
+  - scan
+
+default:
+  tags:
+    - shell
+  before_script:
+    # The job shell lands on umask 027, but workspace files must be
+    # world-readable — portage's userfetch reads the bind-mounted
+    # portage/ checkout as uid 250 inside the build container.
+    - umask 022
+    - eval $(ssh-agent -s)
+    - echo "${SSH_AGENT_PID}" > "${PWD}/${CI_JOB_ID}.job"
+    - ssh-add
+    - ssh-add -L
+  after_script:
+    # The scanning job runs in the trivy container without this file or
+    # ssh-agent; failures here never affect job status.
+    - export SSH_AGENT_PID=$(cat "${PWD}/${CI_JOB_ID}.job") || true
+    - eval $(ssh-agent -s -k)
+
+build:
+  stage: build
+  variables:
+    # Full history: the Makefile stamps images with `git rev-list --count HEAD`,
+    # wrong on a shallow clone.
+    GIT_DEPTH: 0
+    GITHUB_PRIVKEY: "/home/gitlab-runner/.ssh/id_ed25519"
+  artifacts:
+    paths:
+      - .state
+  script:
+    - docker version --format 'docker server {{.Server.Version}}'
+    - make submodules
+    - make repos
+    - make
+
+test:
+  stage: test
+  needs:
+    - build
+  script:
+    - make test
+
+deploy:
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  needs:
+    - build
+    - test
+  script:
+    - make push
+
+# Lib contract (build_utils 3079e47b): declare a scan stage after the
+# push, point needs at the pushing job, and prefer explicit SCAN_IMAGE.
+container-scanning:
+  stage: scan
+  needs:
+    # optional: absent in MR pipelines, where the scan gates the image
+    # built by `build` in this same pipeline
+    - job: deploy
+      artifacts: false
+      optional: true
+  variables:
+    SCAN_IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"

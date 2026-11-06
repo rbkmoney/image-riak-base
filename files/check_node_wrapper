@@ -1,0 +1,20 @@
+#!/bin/sh
+# The relx-4 runner's `riak escript` joins the script path onto
+# $ROOTDIR, so absolute plugin paths break; call the erts escript
+# directly instead, exporting RELEASE_ROOT_DIR as the runner would.
+RIAK_COOKIE="$(grep setcookie /etc/riak/vm.args | awk '{ print $2; }')"
+ERTS_SCRIPT="$(ls /usr/lib/riak/erts-*/bin/escript | head -n 1)"
+
+command="${1}"
+case "${command}" in
+    /*) script="${command}" ;;
+    *)  script="/usr/lib64/nagios/plugins/riak/${command}" ;;
+esac
+shift
+args="${*}"
+
+output="$(RELEASE_ROOT_DIR=/usr/lib/riak "$ERTS_SCRIPT" "${script}" --cookie ${RIAK_COOKIE} ${args})"
+retcode=$?
+
+echo $output | sed "s|${RIAK_COOKIE}|MASKED|g"
+exit $retcode
